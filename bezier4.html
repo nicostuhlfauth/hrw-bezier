@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="./bezier.js"></script>
+	<title>Canvas</title>
+</head>
+
+<body>
+	<canvas id="beziers" width="600" height="600">
+		Alternative content in case the browser does not support Canvas.
+	</canvas>
+
+	<script>
+		window.addEventListener('load', () => {
+			var canvas = document.getElementById('beziers');
+			// check for browser support
+			if (canvas && canvas.getContext) {
+				canvas.addEventListener('mousedown', draw, false);
+				ctx = canvas.getContext('2d');
+				if (ctx) {
+					draw();
+				}
+			}
+		}, false);
+	</script>
+</body>
+
+</html>
