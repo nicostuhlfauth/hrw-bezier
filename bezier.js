@@ -13,14 +13,14 @@ function getRandomPoint(width, height) {
 var width = 600;
 var height = 600;
 var max_bezier_depth = 5;
-var num_points = 4;
+var num_points = 3;
 var CP = Array(num_points);
 var line_width = 2;
 var point_size = 3;
 var back_color = '#303030';
 var line_color = '#ff1010';
 var point_color = '#40f040';
-var tangent_color = '#1010f0'
+var tangent_color = '#1010f0';
 
 function draw() {
     for (var i = 0; i < num_points; i++) {
@@ -62,7 +62,6 @@ function bezier3(P0, P1, P2, tiefe) {
     else {
         var P01 = new P(0.5 * (P0.x + P1.x), 0.5 * (P0.y + P1.y));
         var P12 = new P(0.5 * (P1.x + P2.x), 0.5 * (P1.y + P2.y));
-        tangentLine(P01, P12);
 
         var P012 = new P(0.5 * (P01.x + P12.x), 0.5 * (P01.y + P12.y));
 
