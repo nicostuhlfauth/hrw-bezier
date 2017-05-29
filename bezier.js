@@ -35,6 +35,8 @@ function draw () {
 
         myReturnArray = bezierAllgemein(CP, max_bezier_depth);
 
+        console.log(myReturnArray);
+
         for (var i=0; i<num_points; i++) {
             point(CP[i]);
         }
@@ -111,8 +113,8 @@ function bezierAllgemein(points, depth) {
         }
         myReturnArray2.push(points[points.length-1]);
 
-        bezierAllgemein(myReturnArray1, depth-1);
-        bezierAllgemein(myReturnArray2, depth-1);
+        return bezierAllgemein(myReturnArray1, depth-1) && bezierAllgemein(myReturnArray2,depth-1);
+
     } else {
         return points;
     }
