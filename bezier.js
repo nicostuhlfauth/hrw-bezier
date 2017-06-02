@@ -10,18 +10,18 @@ function getRandomPoint(width, height) {
         Math.floor(Math.random() * height));
 }
 
-var inputArray = [];
+const inputArray = [];
 let myReturnArray;
-var width  = 600;
-var height = 600;
-var max_bezier_depth = 5;
-var num_points = 4;
-var CP = Array(num_points);
-var line_width = 2;
-var point_size = 3;
-var back_color = '#303030';
-var line_color = '#ff1010';
-var point_color = '#40f040';
+const width = 600;
+const height = 600;
+const max_bezier_depth = 5;
+const num_points = 4;
+const CP = Array(num_points);
+const line_width = 2;
+const point_size = 3;
+const back_color = '#303030';
+const line_color = '#ff1010';
+const point_color = '#40f040';
 
 function draw () {
     for (var i=0; i<num_points; i++) {
@@ -35,7 +35,9 @@ function draw () {
 
         myReturnArray = bezierAllgemein(CP, max_bezier_depth);
 
-        console.log(myReturnArray);
+        //console.log(myReturnArray[0], myReturnArray[myReturnArray.length-1]);
+
+        line(myReturnArray[0], myReturnArray[myReturnArray.length-1]);
 
         for (var i=0; i<num_points; i++) {
             point(CP[i]);
@@ -113,9 +115,12 @@ function bezierAllgemein(points, depth) {
         }
         myReturnArray2.push(points[points.length-1]);
 
+        console.log(myReturnArray1, depth-1);
+        console.log(myReturnArray2,depth-1);
         return bezierAllgemein(myReturnArray1, depth-1) && bezierAllgemein(myReturnArray2,depth-1);
 
     } else {
+        //console.log(points);
         return points;
     }
 }
