@@ -66,25 +66,19 @@ function pointAddition(myPoint1, myPoint2) {
 function bezier(CP, t) {
 
     let myReturnArray = [];
-    for (let h in CP ) {
+
+    myReturnArray.push(CP);
+
+    for (let h = 0; h < CP.length-1; h++ ) {
         myReturnArray.push([])
     }
 
-    for (let i in CP) {
-        myPoints.push(CP[i]);
-    }
-
-    myReturnArray[0].push(myPoints);
-
     for (let j = 1; j < num_points; j++) {
         for (let k = 0; k < num_points-j; k++) {
-            console.log(j + myReturnArray[j-1][k]);
-            console.log(myReturnArray[j-1][k+1]);
-            //myReturnArray[j].push((1-t) * myReturnArray[j-1][k] + t * myReturnArray[j-1][k+1]);
-            //myReturnArray[j].push(pointAddition(pointMultiply(myReturnArray[j-1][k], (1-t)), pointMultiply(myReturnArray[j-1][k+1], t)));
+            myReturnArray[j].push(pointAddition(pointMultiply(myReturnArray[j-1][k], (1-t)), pointMultiply(myReturnArray[j-1][k+1], t)));
         }
     }
-    //console.log(myReturnArray);
+    console.log(myReturnArray);
 }
 
 draw();
