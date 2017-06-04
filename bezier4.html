@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8" />
-	<script src="./bezier.js"></script>
+	<script src="./decasteljau.js"></script>
 	<title>Canvas</title>
 </head>
 
@@ -13,14 +13,15 @@
 	</canvas>
 
 	<script>
+
 		window.addEventListener('load', () => {
 			var canvas = document.getElementById('beziers');
 			// check for browser support
 			if (canvas && canvas.getContext) {
-				canvas.addEventListener('mousedown', draw, false);
+				canvas.addEventListener('mousedown', domloaded(), false);
 				ctx = canvas.getContext('2d');
 				if (ctx) {
-					draw();
+					domloaded();
 				}
 			}
 		}, false);
