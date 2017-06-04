@@ -1,7 +1,6 @@
-document.addEventListener('DOMContentLoaded',domloaded,false);
-function domloaded() {
-    let canvas = document.getElementById("beziers");
-    let ctx = canvas.getContext("2d");
+function domloaded(canvas, ctx) {
+    //let canvas = document.getElementById("beziers");
+    //let ctx = canvas.getContext("2d");
 
     function P(x, y) {
         this.x = x;
@@ -14,8 +13,8 @@ function domloaded() {
     }
 
 
-    const width = 600;
-    const height = 600;
+    const width = canvas.width;
+    const height = canvas.height;
     const max_bezier_depth = 10;
     const num_points = 50;
     const CP = new Array(num_points);

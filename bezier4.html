@@ -5,23 +5,38 @@
 	<meta charset="utf-8" />
 	<script src="./decasteljau.js"></script>
 	<title>Canvas</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
-	<canvas id="beziers" width="600" height="600">
+	<canvas id="beziers">
 		Alternative content in case the browser does not support Canvas.
 	</canvas>
 
 	<script>
 
+        let canvas = document.getElementById("beziers");
+        let ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
 		window.addEventListener('load', () => {
 			var canvas = document.getElementById('beziers');
 			// check for browser support
 			if (canvas && canvas.getContext) {
-				canvas.addEventListener('mousedown', domloaded(), false);
+				canvas.addEventListener('mousedown', domloaded(canvas,ctx), false);
 				ctx = canvas.getContext('2d');
 				if (ctx) {
-					domloaded();
+					domloaded(canvas,ctx);
 				}
 			}
 		}, false);
