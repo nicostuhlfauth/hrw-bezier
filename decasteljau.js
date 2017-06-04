@@ -10,7 +10,6 @@ function getRandomPoint(width, height) {
         Math.floor(Math.random() * height));
 }
 
-let myPoints = [];
 let depth = 0;
 const width = 600;
 const height = 600;
@@ -50,8 +49,8 @@ function point (P)
 
 function line (P0, P1) {
     ctx.beginPath();
-    ctx.moveTo(P0.x, P0.y);
-    ctx.lineTo(P1.x, P1.y);
+    ctx.moveTo(P0[0].x, P0[0].y);
+    ctx.lineTo(P1[0].x, P1[0].y);
     ctx.stroke();
 }
 
@@ -63,23 +62,39 @@ function pointAddition(myPoint1, myPoint2) {
     return new P(myPoint1.x+myPoint2.x, myPoint1.y+myPoint2.y);
 }
 
-function bezier(CP, t) {
-
-    let myReturnArray = [];
-
-    myReturnArray.push(CP);
-
-    for (let h = 0; h < CP.length-1; h++ ) {
-        myReturnArray.push([])
+function bezier(tempPoints, t, tiefe) {
+    if (tiefe === 0) {
+        line(tempPoints[0], tempPoints[tempPoints.length-1]);
+        console.log(tempPoints[tempPoints.length-1]);
     }
+    else {
+        let myReturnArray1 = [];
+        let myReturnArray2 = [];
 
-    for (let j = 1; j < num_points; j++) {
-        for (let k = 0; k < num_points-j; k++) {
-            myReturnArray[j].push(pointAddition(pointMultiply(myReturnArray[j-1][k], (1-t)), pointMultiply(myReturnArray[j-1][k+1], t)));
+        let myPoints = [];
+
+        myPoints.push(tempPoints);
+
+        for (let h = 0; h < tempPoints.length-1; h++ ) {
+            myPoints.push([])
         }
+
+        for (let j = 1; j < num_points; j++) {
+            for (let k = 0; k < num_points-j; k++) {
+                myPoints[j].push(pointAddition(pointMultiply(myPoints[j-1][k], (1-t)), pointMultiply(myPoints[j-1][k+1], t)));
+            }
+        }
+        for (let i = 0; i< myPoints.length; i++) {
+            myReturnArray1.push(myPoints[i][0]);
+        }
+        for (let i = myPoints.length; i> 0; i--) {
+            myReturnArray2.push(myPoints[i-1][myPoints[i-1].length-1]);
+        }
+
+        bezier(myReturnArray1, t, tiefe-1);
+        bezier(myReturnArray2, t, tiefe-1);
     }
-    console.log(myReturnArray);
 }
 
 draw();
-bezier(CP, t);
+bezier(CP, t, max_bezier_depth);
