@@ -1,5 +1,5 @@
-const max_bezier_depth = 10;
-const num_points = 3;
+let max_bezier_depth = 10;
+let num_points = 3;
 let CP = new Array(num_points);
 let t = .5;
 
@@ -39,7 +39,7 @@ const draw = {
         ctx.lineTo(p1.x, p1.y);
         ctx.stroke();
     }
-}
+};
 
 const helper = {
     pointMultiply: (p, t) => {
@@ -47,68 +47,30 @@ const helper = {
     },
     pointAddition: (p1, p2) => {
         return new P(p1.x+p2.x, p1.y+p2.y);
+    },
+    getRandomPoint: (width, height) => {
+        return new P(Math.floor(Math.random() * width),
+            Math.floor(Math.random() * height));
     }
-}
-
-function getRandomPoint(width, height) {
-    return new P(Math.floor(Math.random() * width),
-        Math.floor(Math.random() * height));
-}
+};
 
 function generateRandomView(ctx, width, height) {
     for (let i = 0; i < num_points; i++) {
-        CP[i] = getRandomPoint(width, height);
+        CP[i] = helper.getRandomPoint(width, height);
     }
     if (ctx) {
         ctx.fillStyle = back_color;
         ctx.fillRect(0, 0, width, height);
 
         for (var i = 0; i < num_points; i++) {
-            point(CP[i]);
+            draw.point(CP[i]);
         }
     }
 }
 
-function point(P) {
-    ctx.fillStyle = point_color;
-    ctx.fillRect(P.x - point_size / 2, P.y - point_size / 2, point_size, point_size);
-}
-
-
-function pointMultiply(myPoint, t) {
-    return new P(myPoint.x * t, myPoint.y * t);
-}
-
-function pointAddition(myPoint1, myPoint2) {
-    return new P(myPoint1.x + myPoint2.x, myPoint1.y + myPoint2.y);
-}
-
-function line(ctx, P0, P1) {
-    const line_color = '#ff1010';
-    ctx.strokeStyle = line_color;
-    ctx.lineWidth = line_width;
-
-    ctx.beginPath();
-    ctx.moveTo(P0.x, P0.y);
-    ctx.lineTo(P1.x, P1.y);
-    ctx.stroke();
-}
-
-function tangent(ctx, P0, P1, tiefe) {
-    const line_color = '#00ffff';
-    ctx.strokeStyle = line_color;
-    ctx.lineWidth = (line_width-1)/tiefe*2;
-
-
-    ctx.beginPath();
-    ctx.moveTo(P0.x, P0.y);
-    ctx.lineTo(P1.x, P1.y);
-    ctx.stroke();
-}
-
 function bezier(ctx, tempPoints, t, tiefe) {
     if (tiefe === 0) {
-        line(ctx, tempPoints[0], tempPoints[tempPoints.length - 1]);
+        draw.bezier(ctx, tempPoints[0], tempPoints[tempPoints.length - 1]);
     }
 
     else {
@@ -125,9 +87,9 @@ function bezier(ctx, tempPoints, t, tiefe) {
 
         for (let j = 1; j < num_points; j++) {
             for (let k = 0; k < num_points - j; k++) {
-                myPoints[j].push(pointAddition(pointMultiply(myPoints[j - 1][k], (1 - t)), pointMultiply(myPoints[j - 1][k + 1], t)));
+                myPoints[j].push(helper.pointAddition(helper.pointMultiply(myPoints[j - 1][k], (1 - t)), helper.pointMultiply(myPoints[j - 1][k + 1], t)));
                 if (tiefe >= max_bezier_depth) {
-                    tangent(ctx, myPoints[j - 1][k], myPoints[j - 1][k + 1], tiefe);
+                    draw.auxiliary(ctx, myPoints[j - 1][k], myPoints[j - 1][k + 1], tiefe);
                 }
             }
         }
@@ -148,6 +110,6 @@ function domloaded(canvas, ctx) {
     const width = canvas.width;
     const height = canvas.height;
 
-    draw(ctx, width, height);
+    generateRandomView(ctx, width, height);
     bezier(ctx, CP, t, max_bezier_depth);
 }
