@@ -1,3 +1,4 @@
+//document.addEventListener('DOMContentLoaded',domloaded,false);
 function domloaded(canvas, ctx) {
     //let canvas = document.getElementById("beziers");
     //let ctx = canvas.getContext("2d");
@@ -12,18 +13,16 @@ function domloaded(canvas, ctx) {
             Math.floor(Math.random() * height));
     }
 
-
     const width = canvas.width;
     const height = canvas.height;
     const max_bezier_depth = 10;
-    const num_points = 50;
+    const num_points = 3;
     const CP = new Array(num_points);
     const t = .5;
 
     const line_width = 2;
     const point_size = 3;
     const back_color = '#303030';
-    const line_color = '#ff1010';
     const point_color = '#40f040';
 
     function draw() {
@@ -34,8 +33,6 @@ function domloaded(canvas, ctx) {
         if (ctx) {
             ctx.fillStyle = back_color;
             ctx.fillRect(0, 0, width, height);
-            ctx.lineWidth = line_width;
-            ctx.strokeStyle = line_color;
 
             for (var i = 0; i < num_points; i++) {
                 point(CP[i]);
@@ -58,6 +55,22 @@ function domloaded(canvas, ctx) {
     }
 
     function line(P0, P1) {
+        const line_color = '#ff1010';
+        ctx.strokeStyle = line_color;
+        ctx.lineWidth = line_width;
+
+        ctx.beginPath();
+        ctx.moveTo(P0.x, P0.y);
+        ctx.lineTo(P1.x, P1.y);
+        ctx.stroke();
+    }
+
+    function tangent(P0, P1, tiefe) {
+        const line_color = '#00ffff';
+        ctx.strokeStyle = line_color;
+        ctx.lineWidth = (line_width-1)/tiefe*2;
+
+
         ctx.beginPath();
         ctx.moveTo(P0.x, P0.y);
         ctx.lineTo(P1.x, P1.y);
@@ -69,6 +82,7 @@ function domloaded(canvas, ctx) {
             line(tempPoints[0], tempPoints[tempPoints.length - 1]);
             //console.log(tempPoints[0], tempPoints[tempPoints.length - 1]);
         }
+
         else {
             let myReturnArray1 = [];
             let myReturnArray2 = [];
@@ -84,8 +98,12 @@ function domloaded(canvas, ctx) {
             for (let j = 1; j < num_points; j++) {
                 for (let k = 0; k < num_points - j; k++) {
                     myPoints[j].push(pointAddition(pointMultiply(myPoints[j - 1][k], (1 - t)), pointMultiply(myPoints[j - 1][k + 1], t)));
+                    if (tiefe >= max_bezier_depth) {
+                        tangent(myPoints[j - 1][k], myPoints[j - 1][k + 1], tiefe);
+                    }
                 }
             }
+
             for (let i = 0; i < myPoints.length; i++) {
                 myReturnArray1.push(myPoints[i][0]);
             }

@@ -23,18 +23,19 @@
 
 	<script>
 
-        let canvas = document.getElementById("beziers");
+        let canvas = document.getElementById('beziers');
         let ctx = canvas.getContext("2d");
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+
 		window.addEventListener('load', () => {
-			var canvas = document.getElementById('beziers');
-			// check for browser support
+
+            // check for browser support
 			if (canvas && canvas.getContext) {
+
 				canvas.addEventListener('mousedown', domloaded(canvas,ctx), false);
-				ctx = canvas.getContext('2d');
 				if (ctx) {
 					domloaded(canvas,ctx);
 				}
