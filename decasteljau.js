@@ -38,6 +38,14 @@ const draw = {
         ctx.moveTo(p0.x, p0.y);
         ctx.lineTo(p1.x, p1.y);
         ctx.stroke();
+    },
+    backgroundColor: (ctx, width, height) => {
+        ctx.fillStyle = back_color;
+        ctx.fillRect(0, 0, width, height);
+
+        for (var i = 0; i < num_points; i++) {
+            draw.point(CP[i]);
+        }
     }
 };
 
@@ -60,21 +68,13 @@ const helper = {
         for (let i = 0; i < num_points; i++) {
             CP[i] = helper.getRandomPoint(width, height);
         }
-    },
-    backgroundColor: (ctx, width, height) => {
-        ctx.fillStyle = back_color;
-        ctx.fillRect(0, 0, width, height);
-
-        for (var i = 0; i < num_points; i++) {
-            draw.point(CP[i]);
-        }
     }
 };
 
 function generateRandomView(ctx, width, height) {
     helper.randomPoints(width, height);
     if (ctx) {
-        helper.backgroundColor(ctx, width, height);
+        draw.backgroundColor(ctx, width, height);
     }
 }
 
