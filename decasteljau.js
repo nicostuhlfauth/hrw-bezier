@@ -51,14 +51,17 @@ const helper = {
     getRandomPoint: (width, height) => {
         return new P(Math.floor(Math.random() * width),
             Math.floor(Math.random() * (height-50)));
-    }
-};
-
-function generateRandomView(ctx, width, height) {
-    for (let i = 0; i < num_points; i++) {
-        CP[i] = helper.getRandomPoint(width, height);
-    }
-    if (ctx) {
+    },
+    addPoint: (x, y) => {
+        CP.push(new P(x, y));
+        num_points++;
+    },
+    randomPoints: (width, height) => {
+        for (let i = 0; i < num_points; i++) {
+            CP[i] = helper.getRandomPoint(width, height);
+        }
+    },
+    backgroundColor: (ctx, width, height) => {
         ctx.fillStyle = back_color;
         ctx.fillRect(0, 0, width, height);
 
@@ -66,10 +69,17 @@ function generateRandomView(ctx, width, height) {
             draw.point(CP[i]);
         }
     }
+};
+
+function generateRandomView(ctx, width, height) {
+    helper.randomPoints(width, height);
+    if (ctx) {
+        helper.backgroundColor(ctx, width, height);
+    }
 }
 
-function bezier(ctx, tempPoints, t, tiefe) {
-    if (tiefe === 0) {
+function bezier(ctx, tempPoints, t, depth) {
+    if (depth === 0) {
         draw.bezier(ctx, tempPoints[0], tempPoints[tempPoints.length - 1]);
     }
 
@@ -88,8 +98,8 @@ function bezier(ctx, tempPoints, t, tiefe) {
         for (let j = 1; j < num_points; j++) {
             for (let k = 0; k < num_points - j; k++) {
                 myPoints[j].push(helper.pointAddition(helper.pointMultiply(myPoints[j - 1][k], (1 - t)), helper.pointMultiply(myPoints[j - 1][k + 1], t)));
-                if (tiefe >= max_bezier_depth) {
-                    draw.auxiliary(ctx, myPoints[j - 1][k], myPoints[j - 1][k + 1], tiefe);
+                if (depth >= max_bezier_depth) {
+                    draw.auxiliary(ctx, myPoints[j - 1][k], myPoints[j - 1][k + 1], depth);
                 }
             }
         }
@@ -101,15 +111,11 @@ function bezier(ctx, tempPoints, t, tiefe) {
             myReturnArray2.push(myPoints[i - 1][myPoints[i - 1].length - 1]);
         }
 
-        bezier(ctx, myReturnArray1, t, tiefe - 1);
-        bezier(ctx, myReturnArray2, t, tiefe - 1);
+        bezier(ctx, myReturnArray1, t, depth - 1);
+        bezier(ctx, myReturnArray2, t, depth - 1);
     }
 }
 
-function domloaded(canvas, ctx) {
-    const width = canvas.width;
-    const height = canvas.height;
-
-    generateRandomView(ctx, width, height);
+function domloaded(ctx) {
     bezier(ctx, CP, t, max_bezier_depth);
 }
