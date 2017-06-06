@@ -1,7 +1,7 @@
 const max_bezier_depth = 10;
 const num_points = 3;
-const CP = new Array(num_points);
-const t = .5;
+let CP = new Array(num_points);
+let t = .5;
 
 const line_width = 2;
 const point_size = 3;
@@ -13,12 +13,49 @@ function P(x, y) {
     this.y = y;
 }
 
+const draw = {
+    point: (p) => {
+        ctx.fillStyle = point_color;
+        ctx.fillRect(p.x - point_size / 2, p.y - point_size / 2, point_size, point_size);
+    },
+    bezier: (ctx, p0, p1) => {
+        const line_color = '#ff1010';
+        ctx.strokeStyle = line_color;
+        ctx.lineWidth = line_width;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+    },
+    auxiliary: (ctx, p0, p1, depth) => {
+        const line_color = '#00ffff';
+        ctx.strokeStyle = line_color;
+        ctx.lineWidth = (line_width-1)/depth*2;
+
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+    }
+}
+
+const helper = {
+    pointMultiply: (p, t) => {
+        return new P(p.x*t, p.y*t);
+    },
+    pointAddition: (p1, p2) => {
+        return new P(p1.x+p2.x, p1.y+p2.y);
+    }
+}
+
 function getRandomPoint(width, height) {
     return new P(Math.floor(Math.random() * width),
         Math.floor(Math.random() * height));
 }
 
-function draw(ctx, width, height) {
+function generateRandomView(ctx, width, height) {
     for (let i = 0; i < num_points; i++) {
         CP[i] = getRandomPoint(width, height);
     }
