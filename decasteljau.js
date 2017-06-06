@@ -50,7 +50,7 @@ const helper = {
     },
     getRandomPoint: (width, height) => {
         return new P(Math.floor(Math.random() * width),
-            Math.floor(Math.random() * height));
+            Math.floor(Math.random() * (height-50)));
     }
 };
 
