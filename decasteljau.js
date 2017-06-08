@@ -31,8 +31,7 @@ const draw = {
     auxiliary: (ctx, p0, p1, depth) => {
         const line_color = '#00ffff';
         ctx.strokeStyle = line_color;
-        ctx.lineWidth = (line_width-1)/depth*2;
-
+        ctx.lineWidth = (line_width - 1) / depth * 2;
 
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
@@ -51,14 +50,14 @@ const draw = {
 
 const helper = {
     pointMultiply: (p, t) => {
-        return new P(p.x*t, p.y*t);
+        return new P(p.x * t, p.y * t);
     },
     pointAddition: (p1, p2) => {
-        return new P(p1.x+p2.x, p1.y+p2.y);
+        return new P(p1.x + p2.x, p1.y + p2.y);
     },
     getRandomPoint: (width, height) => {
         return new P(Math.floor(Math.random() * width),
-            Math.floor(Math.random() * (height-50)));
+            Math.floor(Math.random() * (height - 50)));
     },
     addPoint: (x, y) => {
         CP.push(new P(x, y));
@@ -68,6 +67,17 @@ const helper = {
         for (let i = 0; i < num_points; i++) {
             CP[i] = helper.getRandomPoint(width, height);
         }
+    },
+    removePoint: (x, y) => {
+        let temp = [];
+        for (let i = 0; i < num_points; i++) {
+            if (x > CP[i].x+5 || x < CP[i].x-5 &&
+                y > CP[i].y+5 || y < CP[i].y-5){
+                temp.push(CP[i]);
+            }
+        }
+        num_points = temp.length;
+        CP = temp;
     }
 };
 
@@ -97,7 +107,8 @@ function bezier(ctx, tempPoints, t, depth) {
 
         for (let j = 1; j < num_points; j++) {
             for (let k = 0; k < num_points - j; k++) {
-                myPoints[j].push(helper.pointAddition(helper.pointMultiply(myPoints[j - 1][k], (1 - t)), helper.pointMultiply(myPoints[j - 1][k + 1], t)));
+                myPoints[j].push(helper.pointAddition(helper.pointMultiply(myPoints[j - 1][k],
+                    (1 - t)), helper.pointMultiply(myPoints[j - 1][k + 1], t)));
                 if (depth >= max_bezier_depth) {
                     draw.auxiliary(ctx, myPoints[j - 1][k], myPoints[j - 1][k + 1], depth);
                 }
