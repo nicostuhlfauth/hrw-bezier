@@ -9,7 +9,7 @@
     <script src="./decasteljau.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-    <title>Canvas</title>
+    <title>Bézier curve</title>
     <style>
         html, body, canvas {
             width: 100%;
@@ -20,6 +20,7 @@
             font-family: 'Roboto', sans-serif;
             font-weight: 300;
             text-align: center;
+            background-color: #303030;
         }
 
         button, form {
@@ -57,12 +58,29 @@
             width: 100%;
             margin: 1rem;
         }
-        #mySplit {
-            margin: 0.5rem;
+        #creditButton{
+            position: fixed;
+            right: 0;
+        }
+        p {
+            color: white;
+        }
+        #infocard {
+            padding: 0.5rem;
         }
     </style>
 </head>
 <body>
+<div id="infocard">
+    <button id="creditButton">Toggle Credits and Docs</button>
+    <p id="credits" style="padding-left: 1rem; margin: 0;">
+        The Bézier curve visualisation is an university project by
+        <a href="https://github.com/nicostuhlfauth" target="_blank">Nicolas Stuhlfaurh</a> &
+        <a href="https://github.com/benediktrauch" target="_blank">Benedikt Rauch</a>
+        at <a href="https://en.hochschule-ruhr-west.de" target="_blank">Ruhr West University of Applied Sciences</a><br>
+        Explore the <a href="https://github.com/nicostuhlfauth/hrw-bezier" target="_blank">code</a> and read <a href="./docs" target="_blank">API docs</a>.
+    </p>
+</div>
 
 <div id="inputArea" style="">
     <div id="inputRow">
@@ -72,8 +90,8 @@
             <button class="pointMode" id="movePoints">Move Points</button>
             <input id="numPoints" type="number" value="3">
             <form>
-                <span id="mySplit">Split at:</span><input id="myT" type="range" min="0.1" max="0.9" value="0.5" step="0.1"/>
-                <span id="myDepth">Curve Depth:</span><input id="myD" type="range" min="1" max="15" value="7" step="1"/>
+                <label for="myT">Split at:</label><input id="myT" type="range" min="0.1" max="0.9" value="0.5" step="0.1"/>
+                <label for="myD">Curve Depth:</label><input id="myD" type="range" min="1" max="15" value="7" step="1"/>
 
             </form>
             <button onclick="reload()">Reload</button>
@@ -91,6 +109,7 @@
     let ctx = canvas.getContext("2d");
 
     let numPoints = document.getElementById("numPoints");
+    let recentNumpoint = 3;
 
     let split = document.getElementById("myT");
 
@@ -131,16 +150,24 @@
         }
 
         numPoints.addEventListener('input', () => {
-            myCurve.addPoint(Math.floor(Math.random() * canvas.width),
-                Math.floor(Math.random() * (canvas.height - 50)));
+            if(numPoints.value > recentNumpoint){
+                myCurve.addPoint(Math.floor(Math.random() * canvas.width),
+                    Math.floor(Math.random() * (canvas.height - 50)));
+                recentNumpoint++;
+            } else if (numPoints.value < recentNumpoint){
+                myCurve.removePoint(0, 0);
+                recentNumpoint--;
+            }
             myCurve.drawBackground();
             myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
         });
+
         split.addEventListener('input', () => {
             myCurve.t = split.value;
             myCurve.drawBackground();
             myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
         });
+
         depth.addEventListener('input', () => {
             myCurve.maxDepth = depth.value;
             myCurve.drawBackground();
@@ -151,9 +178,13 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if ($('#addPoints').hasClass('active')){
                 myCurve.addPoint(evt.clientX, evt.clientY);
+                numPoints.value++;
+                recentNumpoint++;
             }
             else if ($('#removePoints').hasClass('active')){
                 myCurve.removePoint(evt.clientX, evt.clientY);
+                numPoints.value--;
+                recentNumpoint--;
             }
             else if ($('#movePoints').hasClass('active')){
                 let x, y;
@@ -171,6 +202,10 @@
             myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
         });
     }, false);
+
+    $('#creditButton').click(() => {
+        $('#credits').toggle("slow");
+    });
 </script>
 </body>
 

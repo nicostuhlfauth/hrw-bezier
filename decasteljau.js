@@ -6,7 +6,7 @@ const point_color = '#40f040';
 
 /**
  * Represents a Beziere Curve object.
- * 
+ *
  * @class Curve
  */
 class Curve {
@@ -21,10 +21,10 @@ class Curve {
 
     /**
      * Draws the Curve with given points.
-     * 
-     * @param {Point} p0 
-     * @param {Point} p1 
-     * 
+     *
+     * @param {Point} p0
+     * @param {Point} p1
+     *
      * @memberOf Curve
      */
     drawCurve(p0, p1) {
@@ -47,11 +47,11 @@ class Curve {
 
     /**
      * Draws auxiliary
-     * 
-     * @param {Point} p0 
-     * @param {Point} p1 
-     * @param {int} depth 
-     * 
+     *
+     * @param {Point} p0
+     * @param {Point} p1
+     * @param {int} depth
+     *
      * @memberOf Curve
      */
     drawAuxiliary(p0, p1, depth) {
@@ -65,12 +65,11 @@ class Curve {
         this.ctx.stroke();
     }
 
-
     /**
      * Draws a point to Canvas.
-     * 
-     * @param {Point} p 
-     * 
+     *
+     * @param {Point} p
+     *
      * @memberOf Curve
      */
     drawPoints (p) {
@@ -78,11 +77,10 @@ class Curve {
         this.ctx.fillRect(p.x - point_size / 2, p.y - point_size / 2, point_size, point_size);
     }
 
-
     /**
      * Draws Canvas background color
-     * 
-     * 
+     *
+     *
      * @memberOf Curve
      */
     drawBackground() {
@@ -91,13 +89,12 @@ class Curve {
 
     }
 
-
     /**
      * Generates random points, # depends on numpoints attribute
-     * 
-     * @param {int} width 
-     * @param {int} height 
-     * 
+     *
+     * @param {int} width
+     * @param {int} height
+     *
      * @memberOf Curve
      */
     generateRandomPoints(width, height) {
@@ -108,14 +105,13 @@ class Curve {
         }
     }
 
-
     /**
      * Implements De Casteljau's Algorithm
      * Calls draw methods to push the generated data to the Canvas
-     * 
-     * @param {Array of Points} temp 
-     * @param {int} depth 
-     * 
+     *
+     * @param {Array of Points} temp
+     * @param {int} depth
+     *
      * @memberOf Curve
      */
     bezierAlgorithm(temp, depth) {
@@ -158,13 +154,12 @@ class Curve {
         }
     }
 
-
     /**
      * Pushs a new point to the array
-     * 
-     * @param {int} x 
-     * @param {int} y 
-     * 
+     *
+     * @param {int} x
+     * @param {int} y
+     *
      * @memberOf Curve
      */
     addPoint(x, y) {
@@ -172,13 +167,12 @@ class Curve {
         this.numPoints++;
     }
 
-
     /**
      * Removes a given point from the array
-     * 
-     * @param {int} x 
-     * @param {int} y 
-     * 
+     *
+     * @param {int} x
+     * @param {int} y
+     *
      * @memberOf Curve
      */
     removePoint(x, y) {
@@ -187,7 +181,10 @@ class Curve {
             if (x > this.data[i].x + 5 || x < this.data[i].x - 5 &&
                 y > this.data[i].y + 5 || y < this.data[i].y - 5) {
                 temp.push(this.data[i]);
-                }
+            }
+        }
+        if (x === 0 && y === 0) {
+            temp.pop();
         }
         this.numPoints = temp.length;
         this.data = temp;
@@ -196,12 +193,12 @@ class Curve {
 
     /**
      * Moves a given point to a new position
-     * 
-     * @param {int} x 
-     * @param {int} y 
-     * @param {int} newX 
-     * @param {int} newY 
-     * 
+     *
+     * @param {int} x
+     * @param {int} y
+     * @param {int} newX
+     * @param {int} newY
+     *
      * @memberOf Curve
      */
     movePoint(x, y, newX, newY) {
@@ -222,7 +219,7 @@ class Curve {
 
 /**
  * Represents a Point object.
- * 
+ *
  * @class Point
  */
 class Point {
@@ -235,7 +232,7 @@ class Point {
 
 /**
  * Helper Class
- * 
+ *
  * @class Helper
  */
 class Helper {
@@ -243,11 +240,11 @@ class Helper {
 
     /**
      * Multiplies a point with a constant value
-     * 
-     * @param {Point} p 
-     * @param {float} t 
-     * @returns 
-     * 
+     *
+     * @param {Point} p
+     * @param {float} t
+     * @returns
+     *
      * @memberOf Helper
      */
     pointMultiply(p, t) {
@@ -257,11 +254,11 @@ class Helper {
 
     /**
      * Adds two points.
-     * 
-     * @param {Point} p1 
-     * @param {Point} p2 
-     * @returns 
-     * 
+     *
+     * @param {Point} p1
+     * @param {Point} p2
+     * @returns
+     *
      * @memberOf Helper
      */
     pointAddition(p1, p2) {
