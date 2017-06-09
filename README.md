@@ -1,2 +1,4 @@
-# hrw-bezier
-Bèzier Curve Visualization in Javascript / University Project
+#Bézier curve
+
+![Image Upload](screenshot.jpg "Bézier curve")
+
