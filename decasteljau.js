@@ -1,7 +1,7 @@
 let max_bezier_depth = 10;
 let num_points = 3;
 let CP = new Array(num_points);
-let t = .5;
+let t = 0.5; //document.getElementById("myT").value;
 
 const line_width = 2;
 const point_size = 3;
@@ -41,7 +41,6 @@ const draw = {
     backgroundColor: (ctx, width, height) => {
         ctx.fillStyle = back_color;
         ctx.fillRect(0, 0, width, height);
-
         for (var i = 0; i < num_points; i++) {
             draw.point(CP[i]);
         }
@@ -71,14 +70,37 @@ const helper = {
     removePoint: (x, y) => {
         let temp = [];
         for (let i = 0; i < num_points; i++) {
-            if (x > CP[i].x+5 || x < CP[i].x-5 &&
-                y > CP[i].y+5 || y < CP[i].y-5){
+            if (x > CP[i].x + 5 || x < CP[i].x - 5 &&
+                y > CP[i].y + 5 || y < CP[i].y - 5) {
                 temp.push(CP[i]);
             }
         }
         num_points = temp.length;
         CP = temp;
+    },
+    movePoint: (x, y, newX, newY) => {
+        let temp = [];
+        for (let i = 0; i < num_points; i++) {
+            if (x > CP[i].x + 5 || x < CP[i].x - 5 &&
+                y > CP[i].y + 5 || y < CP[i].y - 5) {
+                temp.push(CP[i]);
+            }
+            else {
+                temp.push(new P(newX, newY));
+            }
+        }
+        CP = temp;
+    },
+    getNumPoints: () => {
+        return num_points;
+    },
+    setNumPoints: (i) => {
+        num_points = i;
+    },
+    setT: (myT) => {
+        t = myT;
     }
+
 };
 
 function generateRandomView(ctx, width, height) {

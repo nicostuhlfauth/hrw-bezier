@@ -67,10 +67,10 @@
 <div id="inputArea" style="">
     <div id="inputRow">
         <div>
-            <button class="pointMode active" id="addPoints" onclick="">App Points</button>
-            <button class="pointMode" id="removePoints" onclick="reload()">Remove Points</button>
-            <button class="pointMode" id="movePoints" onclick="reload()">Move Points</button>
-            <input type="number" value="3">
+            <button class="pointMode active" id="addPoints">Add Points</button>
+            <button class="pointMode" id="removePoints">Remove Points</button>
+            <button class="pointMode" id="movePoints">Move Points</button>
+            <input id="numPoints" type="number" value="3">
             <form>
                 <span id="mySplit">Split at:</span><input id="myT" type="range" min="0" max="1" value="0.5" step="0.1"/>
             </form>
@@ -92,7 +92,12 @@
     canvas.height = window.innerHeight;
 
     function reload() {
-        domloaded(canvas, ctx);
+        let numPoints = document.getElementById("numPoints");
+        helper.setNumPoints(numPoints.value);
+        let split = document.getElementById("myT");
+        helper.setT(split.value);
+        generateRandomView(ctx, canvas.width, canvas.height);
+        domloaded(ctx);
     }
 
     $('.pointMode').click(function() {
@@ -118,10 +123,21 @@
             else if ($('#removePoints').hasClass('active')){
                 helper.removePoint(evt.clientX, evt.clientY);
             }
+            else if ($('#movePoints').hasClass('active')){
+                let x, y;
+                canvas.addEventListener('mousedown', (event) => {
+                    x = event.clientX;
+                    y = event.clientY;
+                });
+                canvas.addEventListener('mouseup', (event) => {
+                    helper.movePoint(x, y, event.clientX, event.clientY);
+                });
+
+            };
             draw.backgroundColor(ctx, canvas.width, canvas.height);
             domloaded(ctx);
+            document.getElementById("numPoints").value = helper.getNumPoints();
         });
-
     }, false);
 </script>
 </body>
