@@ -72,7 +72,9 @@
             <button class="pointMode" id="movePoints">Move Points</button>
             <input id="numPoints" type="number" value="3">
             <form>
-                <span id="mySplit">Split at:</span><input id="myT" type="range" min="0" max="1" value="0.5" step="0.1"/>
+                <span id="mySplit">Split at:</span><input id="myT" type="range" min="0.1" max="0.9" value="0.5" step="0.1"/>
+                <span id="myDepth">Curve Depth:</span><input id="myD" type="range" min="1" max="15" value="7" step="1"/>
+
             </form>
             <button onclick="reload()">Reload</button>
         </div>
@@ -88,16 +90,28 @@
     let canvas = document.getElementById('beziers');
     let ctx = canvas.getContext("2d");
 
+    let numPoints = document.getElementById("numPoints");
+
+    let split = document.getElementById("myT");
+
+    let depth = document.getElementById("myD");
+
+    let myCurve = new Curve(ctx);
+
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+
     function reload() {
-        let numPoints = document.getElementById("numPoints");
-        helper.setNumPoints(numPoints.value);
-        let split = document.getElementById("myT");
-        helper.setT(split.value);
-        generateRandomView(ctx, canvas.width, canvas.height);
-        domloaded(ctx);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+
+        myCurve.drawBackground();
+        myCurve.generateRandomPoints(canvas.width, canvas.height);
+        myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+
     }
 
     $('.pointMode').click(function() {
@@ -107,21 +121,39 @@
 
 
     window.addEventListener('load', () => {
-
         // check for browser support
         if (canvas && canvas.getContext) {
             if (ctx) {
-                generateRandomView(ctx, canvas.width, canvas.height);
-                domloaded(ctx);
+                myCurve.drawBackground();
+                myCurve.generateRandomPoints(canvas.width, canvas.height);
+                myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
             }
         }
+
+        numPoints.addEventListener('input', () => {
+            myCurve.addPoint(Math.floor(Math.random() * canvas.width),
+                Math.floor(Math.random() * (canvas.height - 50)));
+            myCurve.drawBackground();
+            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+        });
+        split.addEventListener('input', () => {
+            myCurve.t = split.value;
+            myCurve.drawBackground();
+            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+        });
+        depth.addEventListener('input', () => {
+            myCurve.maxDepth = depth.value;
+            myCurve.drawBackground();
+            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+        });
+
         canvas.addEventListener('click', (evt) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if ($('#addPoints').hasClass('active')){
-                helper.addPoint(evt.clientX, evt.clientY);
+                myCurve.addPoint(evt.clientX, evt.clientY);
             }
             else if ($('#removePoints').hasClass('active')){
-                helper.removePoint(evt.clientX, evt.clientY);
+                myCurve.removePoint(evt.clientX, evt.clientY);
             }
             else if ($('#movePoints').hasClass('active')){
                 let x, y;
@@ -130,13 +162,13 @@
                     y = event.clientY;
                 });
                 canvas.addEventListener('mouseup', (event) => {
-                    helper.movePoint(x, y, event.clientX, event.clientY);
+                    myCurve.movePoint(x, y, event.clientX, event.clientY);
                 });
 
             };
-            draw.backgroundColor(ctx, canvas.width, canvas.height);
-            domloaded(ctx);
-            document.getElementById("numPoints").value = helper.getNumPoints();
+            myCurve.drawBackground();
+
+            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
         });
     }, false);
 </script>
