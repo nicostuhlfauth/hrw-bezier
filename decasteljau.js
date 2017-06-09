@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2017 Nicolas Stuhlfauth and Benedikt Rauch
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
 const line_width = 2;
 const point_size = 3;
 const back_color = '#303030';
