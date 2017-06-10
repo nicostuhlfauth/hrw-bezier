@@ -1,0 +1,28 @@
+{
+  "name": "bezier",
+  "version": "1.0.0",
+  "description": "This project provides an interactive visualization of Bézier curves.",
+  "main": "decasteljau.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel decasteljau.js -d lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicostuhlfauth/hrw-bezier.git"
+  },
+  "author": "Nicolas Stuhlfauth and Benedikt Rauch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicostuhlfauth/hrw-bezier/issues"
+  },
+  "homepage": "https://github.com/nicostuhlfauth/hrw-bezier#readme"
+}
