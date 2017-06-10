@@ -123,7 +123,6 @@ class Curve {
      */
     bezierAlgorithm(temp, depth) {
         if (depth === 0) {
-            //draw.bezier(ctx, tempPoints[0], tempPoints[tempPoints.length - 1]);
             this.drawCurve(temp[0], temp[temp.length - 1]);
         }
 
