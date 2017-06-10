@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -11,7 +11,9 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
     <title>Bézier curve</title>
     <style>
-        html, body, canvas {
+        html,
+        body,
+        canvas {
             width: 100%;
             height: 100%;
             padding: 0;
@@ -23,13 +25,15 @@
             background-color: #303030;
         }
 
-        button, form {
+        button,
+        form {
             display: inline-block;
             font-family: 'Roboto', sans-serif;
             font-weight: 100;
             color: white;
             font-size: 1.2rem;
         }
+
         button {
             background-color: rgba(200, 200, 200, 0.2);
             border-color: rgba(200, 200, 200, 0);
@@ -47,7 +51,6 @@
         #inputArea {
             position: absolute;
             width: 100%;
-
         }
 
         #inputRow {
@@ -58,13 +61,16 @@
             width: 100%;
             margin: 1rem;
         }
-        #creditButton{
+
+        #creditButton {
             position: fixed;
             right: 0;
         }
+
         p {
             color: white;
         }
+
         #infocard {
             padding: 0.5rem;
             position: absolute;
@@ -73,143 +79,152 @@
         }
     </style>
 </head>
+
 <body>
-<div id="infocard">
-    <button id="creditButton">Toggle Credits and Docs</button>
-    <p id="credits" style="padding-left: 1rem; margin: 0;">
-        The Bézier curve visualization is a university project by
-        <a href="https://github.com/nicostuhlfauth" target="_blank">Nicolas Stuhlfauth</a> &
-        <a href="https://github.com/benediktrauch" target="_blank">Benedikt Rauch</a>
-        at <a href="https://en.hochschule-ruhr-west.de" target="_blank">Ruhr West University of Applied Sciences</a><br>
-        Explore the <a href="https://github.com/nicostuhlfauth/hrw-bezier" target="_blank">code</a> and read <a href="./docs" target="_blank">API docs</a>.
-    </p>
-</div>
+    <div id="infocard">
+        <button id="creditButton">Toggle Credits and Docs</button>
+        <p id="credits" style="padding-left: 1rem; margin: 0;">
+            The Bézier curve visualization is a university project by
+            <a href="https://github.com/nicostuhlfauth" target="_blank">Nicolas Stuhlfauth</a> &
+            <a href="https://github.com/benediktrauch" target="_blank">Benedikt Rauch</a> at <a href="https://en.hochschule-ruhr-west.de"
+                target="_blank">Ruhr West University of Applied Sciences</a><br> Explore the <a href="https://github.com/nicostuhlfauth/hrw-bezier"
+                target="_blank">code</a> and read <a href="./docs" target="_blank">API docs</a>.
+        </p>
+    </div>
 
-<div id="inputArea" style="">
-    <div id="inputRow">
-        <div>
-            <button class="pointMode active" id="addPoints">Add Points</button>
-            <button class="pointMode" id="removePoints">Remove Points</button>
-            <button class="pointMode" id="movePoints">Move Points</button>
-            <input id="numPoints" type="number" value="3">
-            <form>
-                <label for="myT">Split at:</label><input id="myT" type="range" min="0.1" max="0.9" value="0.5" step="0.1"/>
-                <label for="myD">Curve Depth:</label><input id="myD" type="range" min="1" max="15" value="7" step="1"/>
+    <div id="inputArea">
+        <div id="inputRow">
+            <div>
+                <button class="pointMode active" id="addPoints">Add Points</button>
+                <button class="pointMode" id="removePoints">Remove Points</button>
+                <button class="pointMode" id="movePoints">Move Points</button>
+                <input id="numPoints" type="number" value="3">
+                <form>
+                    <label for="myT">Split at:</label><input id="myT" type="range" min="0.1" max="0.9" value="0.5" step="0.1"
+                    />
+                    <label for="myD">Curve Depth:</label><input id="myD" type="range" min="1" max="15" value="7" step="1"
+                    />
 
-            </form>
-            <button onclick="reload()">Reload</button>
+                </form>
+                <button onclick="reload()">Reload</button>
+            </div>
         </div>
     </div>
-</div>
-<canvas id="beziers">
-    Alternative content in case the browser does not support Canvas.
-</canvas>
+    <canvas id="beziers">
+        Alternative content in case the browser does not support Canvas.
+    </canvas>
 
-<script>
+    <script>
+        let canvas = document.getElementById('beziers');
+        let ctx = canvas.getContext("2d");
 
+        let numPoints = document.getElementById("numPoints");
+        let recentNumpoint = 3;
 
-    let canvas = document.getElementById('beziers');
-    let ctx = canvas.getContext("2d");
+        let split = document.getElementById("myT");
 
-    let numPoints = document.getElementById("numPoints");
-    let recentNumpoint = 3;
+        let depth = document.getElementById("myD");
 
-    let split = document.getElementById("myT");
-
-    let depth = document.getElementById("myD");
-
-    let myCurve = new Curve(ctx);
+        let myCurve = new Curve(ctx);
 
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
 
-    function reload() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function reload() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
 
-        myCurve.drawBackground();
-        myCurve.generateRandomPoints(canvas.width, canvas.height);
-        myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+            myCurve.drawBackground();
+            myCurve.generateRandomPoints(canvas.width, canvas.height);
+            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
 
-    }
-
-    $('.pointMode').click(function() {
-        $('.pointMode').removeClass('active');
-        $(this).toggleClass('active');
-    });
-
-
-    window.addEventListener('load', () => {
-        // check for browser support
-        if (canvas && canvas.getContext) {
-            if (ctx) {
-                myCurve.drawBackground();
-                myCurve.generateRandomPoints(canvas.width, canvas.height);
-                myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
-            }
         }
 
-        numPoints.addEventListener('input', () => {
-            if(numPoints.value > recentNumpoint){
-                myCurve.addPoint(Math.floor(Math.random() * canvas.width),
-                    Math.floor(Math.random() * (canvas.height - 50)));
-                recentNumpoint++;
-            } else if (numPoints.value < recentNumpoint){
-                myCurve.removePoint(0, 0);
-                recentNumpoint--;
+        $('.pointMode').click(function () {
+            $('.pointMode').removeClass('active');
+            $(this).toggleClass('active');
+        });
+
+
+        window.addEventListener('load', () => {
+            // check for browser support
+            if (canvas && canvas.getContext) {
+                if (ctx) {
+                    myCurve.drawBackground();
+                    myCurve.generateRandomPoints(canvas.width, canvas.height);
+                    myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+                }
             }
-            myCurve.drawBackground();
-            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+
+            numPoints.addEventListener('input', () => {
+                if (numPoints.value > recentNumpoint) {
+                    myCurve.addPoint(Math.floor(Math.random() * canvas.width),
+                        Math.floor(Math.random() * (canvas.height - 50)));
+                    recentNumpoint++;
+                } else if (numPoints.value < recentNumpoint) {
+                    myCurve.removePoint(0, 0);
+                    recentNumpoint--;
+                }
+                myCurve.drawBackground();
+                myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+            });
+
+            // prevent direct input into numPoints
+            // ref: https://stackoverflow.com/questions/17164278/disable-writing-in-input-type-number-html5
+            $("#numPoints").keypress((evt) => {
+                evt.preventDefault();
+                alert("Direct input disabled. Please do only use the up and down arrows for changing the number of points.");
+            });
+
+            split.addEventListener('input', () => {
+                myCurve.t = split.value;
+                myCurve.drawBackground();
+                myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+            });
+
+            depth.addEventListener('input', () => {
+                myCurve.maxDepth = depth.value;
+                myCurve.drawBackground();
+                myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+            });
+
+            canvas.addEventListener('click', (evt) => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if ($('#addPoints').hasClass('active')) {
+                    myCurve.addPoint(evt.clientX, evt.clientY);
+                    numPoints.value++;
+                    recentNumpoint++;
+                }
+                else if ($('#removePoints').hasClass('active')) {
+                    myCurve.removePoint(evt.clientX, evt.clientY);
+                    numPoints.value--;
+                    recentNumpoint--;
+                }
+                else if ($('#movePoints').hasClass('active')) {
+                    let x, y;
+                    canvas.addEventListener('mousedown', (event) => {
+                        x = event.clientX;
+                        y = event.clientY;
+                    });
+                    canvas.addEventListener('mouseup', (event) => {
+                        myCurve.movePoint(x, y, event.clientX, event.clientY);
+                    });
+
+                };
+                myCurve.drawBackground();
+
+                myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
+            });
+        }, false);
+
+        $('#creditButton').click(() => {
+            $('#credits').toggle("slow");
         });
 
-        split.addEventListener('input', () => {
-            myCurve.t = split.value;
-            myCurve.drawBackground();
-            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
-        });
-
-        depth.addEventListener('input', () => {
-            myCurve.maxDepth = depth.value;
-            myCurve.drawBackground();
-            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
-        });
-
-        canvas.addEventListener('click', (evt) => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if ($('#addPoints').hasClass('active')){
-                myCurve.addPoint(evt.clientX, evt.clientY);
-                numPoints.value++;
-                recentNumpoint++;
-            }
-            else if ($('#removePoints').hasClass('active')){
-                myCurve.removePoint(evt.clientX, evt.clientY);
-                numPoints.value--;
-                recentNumpoint--;
-            }
-            else if ($('#movePoints').hasClass('active')){
-                let x, y;
-                canvas.addEventListener('mousedown', (event) => {
-                    x = event.clientX;
-                    y = event.clientY;
-                });
-                canvas.addEventListener('mouseup', (event) => {
-                    myCurve.movePoint(x, y, event.clientX, event.clientY);
-                });
-
-            };
-            myCurve.drawBackground();
-
-            myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
-        });
-    }, false);
-
-    $('#creditButton').click(() => {
-        $('#credits').toggle("slow");
-    });
-</script>
+    </script>
 </body>
 
 </html>
