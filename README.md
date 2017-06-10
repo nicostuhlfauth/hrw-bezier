@@ -1,6 +1,6 @@
 # Bézier curve visualization
 
-This project provides an interactive visualization of bezier curves.
+This project provides an interactive visualization of Bézier curves.
 
 ### Features:
 - Drawing a random curve with #n points
@@ -16,6 +16,9 @@ You may either visit [https://nicostuhlfauth.github.io/hrw-bezier/]() or clone /
 <p align="center">
 <img src="./showcase/screenshot.jpg" alt="Screenshot of Bézier curve visualization" style="width: 70%;" />
 </p>
+
+## Docs
+If you want to create your own project, which rests upon this repository or if you are interested in other ways as well, you may have a look at our [API Docs](https://nicostuhlfauth.github.io/hrw-bezier/docs).
 
 ## About
 This project has been created by [Nicolas Stuhlfauth](https://github.com/nicostuhlfauth) and [Benedikt Rauch](https://github.com/benediktrauch) as part of the academic module "Computergraphics and Visualization" within the Bachelor degree course Human-Machine-Interaction at Ruhr West University of Applied Sciences.
