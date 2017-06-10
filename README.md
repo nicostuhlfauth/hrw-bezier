@@ -4,7 +4,7 @@ This project provides an interactive visualization of Bézier curves.
 
 ### Features:
 - Drawing a random curve with #n points
-- Auxiliary visualization
+- Auxiliary visualization / hiding auxiliaries
 - Adding some points
 - Removing points
 - Moving points

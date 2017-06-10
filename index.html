@@ -104,9 +104,12 @@
                     />
                     <label for="myD">Curve Depth:</label><input id="myD" type="range" min="1" max="15" value="7" step="1"
                     />
+                    <input type="checkbox" id="auxCheck" checked>
+                <label for="auxCheck">Auxiliaries?</label>
 
                 </form>
-                <button onclick="reload()">Reload</button>
+                
+                <button onclick="reload(true)">Reload</button>
             </div>
         </div>
     </div>
@@ -127,18 +130,21 @@
 
         let myCurve = new Curve(ctx);
 
+        let aux = document.getElementById("auxCheck");
+
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
 
-        function reload() {
+        function reload(newPoints) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-
+            if (newPoints) {
+                myCurve.generateRandomPoints(canvas.width, canvas.height);
+            }
 
             myCurve.drawBackground();
-            myCurve.generateRandomPoints(canvas.width, canvas.height);
             myCurve.bezierAlgorithm(myCurve.data, myCurve.maxDepth);
 
         }
@@ -178,6 +184,13 @@
                 evt.preventDefault();
                 alert("Direct input disabled. Please do only use the up and down arrows for changing the number of points.");
             });
+
+            aux.addEventListener('change', () => {
+                myCurve.renewAux();
+                reload(false);
+
+            })
+
 
             split.addEventListener('input', () => {
                 myCurve.t = split.value;

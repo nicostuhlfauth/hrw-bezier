@@ -23,6 +23,7 @@ class Curve {
         this.data = [];
         this.maxDepth = 7;
         this.t = 0.5;
+        this.aux = true;
     }
 
 
@@ -70,6 +71,14 @@ class Curve {
         this.ctx.moveTo(p0.x, p0.y);
         this.ctx.lineTo(p1.x, p1.y);
         this.ctx.stroke();
+    }
+
+    renewAux() {
+        this.aux = !this.aux;
+    }
+
+    getAux() {
+        return this.aux;
     }
 
     /**
@@ -142,7 +151,7 @@ class Curve {
                 for (let k = 0; k < this.numPoints - j; k++) {
                     myPoints[j].push(myHelper.pointAddition(myHelper.pointMultiply(myPoints[j - 1][k],
                         (1 - this.t)), myHelper.pointMultiply(myPoints[j - 1][k + 1], this.t)));
-                    if (depth >= this.maxDepth) {
+                    if (depth >= this.maxDepth && this.aux) {
                         this.drawAuxiliary(myPoints[j - 1][k], myPoints[j - 1][k + 1], depth);
                     }
                 }
